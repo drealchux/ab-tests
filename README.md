@@ -56,7 +56,7 @@ This project started from a well-known public dataset used in dozens of portfoli
 │   ├── raw/                 ab_data.csv, countries.csv
 │   └── DATA_CARD.md         data provenance, schema, and honest limitations
 ├── reports/                  generated report + figures (regenerable, not hand-edited)
-├── .claude/skills/           Claude Code skills that automate the pipeline (see below)
+├── .claude/skills/           agent skills that automate the pipeline (see below)
 └── .github/workflows/        CI: pytest runs on every push
 ```
 
@@ -76,14 +76,14 @@ python scripts/run_experiment.py --ab-data data/raw/ab_data.csv --countries data
 python scripts/generate_report.py --results reports/experiment_results.json --out reports/experiment_report.md
 ```
 
-## Claude Code skills
+## Reusable analysis skills
 
-Two [Claude Code Skills](https://docs.claude.com/en/docs/claude-code) package the pipeline as reusable, agent-invokable automation rather than one-off scripts someone has to remember exists:
+The pipeline is packaged as two reusable, agent-invokable skills rather than one-off scripts someone has to remember exist:
 
 - **`run-ab-experiment`** — runs the full statistical pipeline on any two-arm conversion CSV (this project's data, or a new one) and produces a structured JSON results file.
 - **`generate-experiment-report`** — turns that JSON into a business-readable markdown report with a rule-based ship / don't-ship / run-longer recommendation, so the recommendation logic lives in one auditable place (`scripts/generate_report.py::recommend()`) instead of being freshly reasoned about — and potentially reasoned about inconsistently — every time.
 
-Point Claude Code at this repo and ask it to "run the experiment analysis" or "check if this new dataset is well-powered" — it will find and use these.
+**To run them:** open this repo with an AI coding assistant that supports the Agent Skills format (it auto-discovers `.claude/skills/`), then ask it to "run the experiment analysis" or "check if this new dataset is well-powered" — it will find and invoke the right skill automatically. No separate install step; the skill definitions just wrap the same CLI commands shown above.
 
 ## Data & limitations
 
